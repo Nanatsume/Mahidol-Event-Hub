@@ -13,11 +13,15 @@ import { ProtectedRoute } from "@/components/protected-route";
 function Router() {
   return (
     <Switch>
-      <ProtectedRoute path="/" component={MahidolEventPlatform} />
-      <ProtectedRoute path="/calendar" component={Calendar} />
-      <ProtectedRoute path="/register" component={Register} />
       <Route path="/auth" component={AuthPage} />
-      <Route component={NotFound} />
+      <Layout>
+        <Switch>
+          <ProtectedRoute path="/" component={MahidolEventPlatform} />
+          <ProtectedRoute path="/calendar" component={Calendar} />
+          <ProtectedRoute path="/register" component={Register} />
+          <Route component={NotFound} />
+        </Switch>
+      </Layout>
     </Switch>
   );
 }
