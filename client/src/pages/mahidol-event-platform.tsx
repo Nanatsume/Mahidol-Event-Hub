@@ -103,8 +103,12 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
           <Button variant="ghost" className="text-white hidden md:flex">
             <Calendar className="mr-1" size={18} /> Calendar
           </Button>
+          <Button variant="ghost" className="text-white hidden md:flex">
+            <Users className="mr-1" size={18} /> My Registrations
+          </Button>
           <Button variant="ghost" className="text-white md:hidden"><Home size={18} /></Button>
           <Button variant="ghost" className="text-white md:hidden"><Calendar size={18} /></Button>
+          <Button variant="ghost" className="text-white md:hidden"><Users size={18} /></Button>
           <Button variant="ghost" className="text-white">
             <Bell size={18} />
           </Button>
@@ -121,6 +125,9 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
                 </div>
                 <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
                   <User size={16} className="mr-2" /> Profile
+                </Button>
+                <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  <Calendar size={16} className="mr-2" /> My Registrations
                 </Button>
                 <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
                   <Heart size={16} className="mr-2" /> Saved Events
@@ -181,36 +188,6 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
           </div>
 
           <div className="flex gap-3">
-            {isUserRegistered ? (
-              <Button disabled className="bg-gray-600 text-white flex-1">
-                Already Registered
-              </Button>
-            ) : (
-              <Button
-                className="bg-green-600 text-white flex-1"
-                onClick={async () => {
-                  try {
-                    await apiRequest("/api/registrations", {
-                      method: "POST",
-                      body: { userId: 1, eventId: selectedEvent.id }
-                    });
-                    setIsUserRegistered(true);
-                    toast({
-                      title: "Success!",
-                      description: "You have successfully registered for this event.",
-                    });
-                  } catch (error) {
-                    toast({
-                      title: "Error",
-                      description: "Failed to register for the event. Please try again.",
-                      variant: "destructive",
-                    });
-                  }
-                }}
-              >
-                Register Now
-              </Button>
-            )}
             <Button className="bg-blue-600 text-white flex-1 flex items-center justify-center">
               <MessageSquare size={18} className="mr-2" /> Contact Organizer
             </Button>
