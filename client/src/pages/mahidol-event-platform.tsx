@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   const [activeTab, setActiveTab] = useState("upcoming");
   const [savedEvents, setSavedEvents] = useState<number[]>([]);
   const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const [_, setLocation] = useLocation();
   const { toast } = useToast();
 
   const categories = [
@@ -54,6 +56,11 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   const { data: events = [] } = useQuery({
     queryKey: ["/api/events"],
   });
+
+  const handleNavigation = (path: string) => {
+    setSelectedEvent(null); // Clear selected event when navigating
+    setLocation(path);
+  };
 
   useQuery({
     queryKey: ["/api/registrations/check", 1, selectedEvent?.id],
@@ -97,18 +104,30 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
       <div className="flex justify-between items-center bg-blue-600 p-3 rounded-lg text-white sticky top-0 z-10 shadow-md">
         <h1 className="text-xl font-bold">Mahidol Event Hub</h1>
         <div className="flex gap-2 items-center">
-          <Button variant="ghost" className="text-white hidden md:flex">
+          <Button 
+            variant="ghost" 
+            className="text-white hidden md:flex"
+            onClick={() => handleNavigation("/")}
+          >
             <Home className="mr-1" size={18} /> Home
           </Button>
-          <Button variant="ghost" className="text-white hidden md:flex">
+          <Button 
+            variant="ghost" 
+            className="text-white hidden md:flex"
+            onClick={() => handleNavigation("/calendar")}
+          >
             <Calendar className="mr-1" size={18} /> Calendar
           </Button>
-          <Button variant="ghost" className="text-white hidden md:flex">
+          <Button 
+            variant="ghost" 
+            className="text-white hidden md:flex"
+            onClick={() => handleNavigation("/register")}
+          >
             <Users className="mr-1" size={18} /> My Registrations
           </Button>
-          <Button variant="ghost" className="text-white md:hidden"><Home size={18} /></Button>
-          <Button variant="ghost" className="text-white md:hidden"><Calendar size={18} /></Button>
-          <Button variant="ghost" className="text-white md:hidden"><Users size={18} /></Button>
+          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/")}><Home size={18} /></Button>
+          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/calendar")}><Calendar size={18} /></Button>
+          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/register")}><Users size={18} /></Button>
           <Button variant="ghost" className="text-white">
             <Bell size={18} />
           </Button>
@@ -126,7 +145,11 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
                 <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
                   <User size={16} className="mr-2" /> Profile
                 </Button>
-                <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleNavigation("/register")}
+                >
                   <Calendar size={16} className="mr-2" /> My Registrations
                 </Button>
                 <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
