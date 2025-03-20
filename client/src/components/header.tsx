@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,18 +14,18 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           <h1 className="text-white text-xl font-bold">Mahidol Event Hub</h1>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <Button variant="ghost" className="text-white">
             <Bell size={18} />
           </Button>
-          
+
           <div className="relative">
             <Avatar className="cursor-pointer" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
               <AvatarImage src="/api/placeholder/40/40" />
               <AvatarFallback>MU</AvatarFallback>
             </Avatar>
-            
+
             {isUserMenuOpen && user && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                 <div className="px-4 py-2 text-gray-800 border-b">
