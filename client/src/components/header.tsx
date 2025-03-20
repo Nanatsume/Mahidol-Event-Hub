@@ -41,7 +41,14 @@ export default function Header() {
                 <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
                   <Heart size={16} className="mr-2" /> Saved Events
                 </Button>
-                <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={async () => {
+                    await fetch('/api/logout', { method: 'POST' });
+                    window.location.reload();
+                  }}
+                >
                   <LogOut size={16} className="mr-2" /> Sign Out
                 </Button>
               </div>
