@@ -23,15 +23,10 @@ type LoginData = {
 };
 
 export default function AuthPage() {
+  // Initialize all hooks first
   const [_, setLocation] = useLocation();
   const { loginMutation, registerMutation, user } = useAuth();
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
-
-  // If user is already logged in, redirect to home
-  if (user) {
-    setLocation("/");
-    return null;
-  }
 
   const loginForm = useForm<LoginData>({
     defaultValues: {
@@ -48,6 +43,12 @@ export default function AuthPage() {
       password: "",
     },
   });
+
+  // Redirect after all hooks are called
+  if (user) {
+    setLocation("/");
+    return null;
+  }
 
   const onLogin = async (data: LoginData) => {
     try {
