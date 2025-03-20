@@ -2,6 +2,14 @@ import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
@@ -29,10 +37,23 @@ export const registrations = pgTable("registrations", {
   registeredAt: timestamp("registered_at").notNull().defaultNow()
 });
 
+// Schema for user operations
+export const insertUserSchema = createInsertSchema(users).omit({ 
+  id: true,
+  createdAt: true 
+}).extend({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  email: z.string().email("Invalid email address"),
+});
+
+// Other schemas remain the same
 export const insertEventSchema = createInsertSchema(events).omit({ id: true });
 export const insertSavedEventSchema = createInsertSchema(savedEvents).omit({ id: true });
 export const insertRegistrationSchema = createInsertSchema(registrations).omit({ id: true, registeredAt: true });
 
+// Types
+export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Event = typeof events.$inferSelect;
 export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type SavedEvent = typeof savedEvents.$inferSelect;

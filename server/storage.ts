@@ -1,11 +1,16 @@
-import { events, type Event, type InsertEvent, type SavedEvent, type InsertSavedEvent, type Registration, type InsertRegistration } from "@shared/schema";
+import { events, type Event, type InsertEvent, type SavedEvent, type InsertSavedEvent, type Registration, type InsertRegistration, type User, type InsertUser } from "@shared/schema";
 
 export interface IStorage {
+  // User methods
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+
+  // Existing methods
   getEvents(): Promise<Event[]>;
   getSavedEvents(userId: number): Promise<SavedEvent[]>;
   saveEvent(savedEvent: InsertSavedEvent): Promise<SavedEvent>;
   unsaveEvent(userId: number, eventId: number): Promise<void>;
-  // New registration methods
   registerForEvent(registration: InsertRegistration): Promise<Registration>;
   getRegistrationsByUser(userId: number): Promise<Registration[]>;
   getRegistrationsByEvent(eventId: number): Promise<Registration[]>;
@@ -13,14 +18,16 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
+  private users: Map<number, User>;
   private events: Event[];
   private savedEvents: SavedEvent[];
   private registrations: Registration[];
+  private userId: number;
   private savedEventId: number;
   private registrationId: number;
 
   constructor() {
-    // Initialize with mock data
+    this.users = new Map();
     this.events = [
       { 
         id: 1,
@@ -85,10 +92,34 @@ export class MemStorage implements IStorage {
     ];
     this.savedEvents = [];
     this.registrations = [];
+    this.userId = 1;
     this.savedEventId = 1;
     this.registrationId = 1;
   }
 
+  // User methods implementation
+  async getUser(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.username === username
+    );
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const id = this.userId++;
+    const user: User = {
+      ...insertUser,
+      id,
+      createdAt: new Date(),
+    };
+    this.users.set(id, user);
+    return user;
+  }
+
+  // Existing methods remain the same
   async getEvents(): Promise<Event[]> {
     return this.events;
   }
@@ -112,7 +143,6 @@ export class MemStorage implements IStorage {
     );
   }
 
-  // New registration methods implementation
   async registerForEvent(registration: InsertRegistration): Promise<Registration> {
     const existingRegistration = await this.isUserRegistered(registration.userId, registration.eventId);
     if (existingRegistration) {

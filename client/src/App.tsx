@@ -6,6 +6,8 @@ import NotFound from "@/pages/not-found";
 import MahidolEventPlatform from "@/pages/mahidol-event-platform";
 import Calendar from "@/pages/calendar";
 import Register from "@/pages/register";
+import AuthPage from "@/pages/auth-page";
+import { AuthProvider } from "@/hooks/use-auth";
 
 function Router() {
   return (
@@ -13,6 +15,7 @@ function Router() {
       <Route path="/" component={MahidolEventPlatform} />
       <Route path="/calendar" component={Calendar} />
       <Route path="/register" component={Register} />
+      <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -21,8 +24,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
+      <AuthProvider>
+        <Router />
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
