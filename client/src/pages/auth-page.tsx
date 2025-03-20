@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
-import { useToast } from "@/hooks/use-toast"; // Updated import
+import { useToast } from "@/hooks/use-toast"; // Fix import path
 
 
 type LoginData = {
