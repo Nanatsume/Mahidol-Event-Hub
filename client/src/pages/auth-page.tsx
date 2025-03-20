@@ -50,13 +50,21 @@ export default function AuthPage() {
   });
 
   const onLogin = async (data: LoginData) => {
-    await loginMutation.mutateAsync(data);
-    setLocation("/");
+    try {
+      await loginMutation.mutateAsync(data);
+      setLocation("/");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   const onRegister = async (data: InsertUser) => {
-    await registerMutation.mutateAsync(data);
-    setLocation("/");
+    try {
+      await registerMutation.mutateAsync(data);
+      setLocation("/");
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   return (

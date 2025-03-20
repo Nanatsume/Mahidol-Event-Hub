@@ -8,13 +8,14 @@ import Calendar from "@/pages/calendar";
 import Register from "@/pages/register";
 import AuthPage from "@/pages/auth-page";
 import { AuthProvider } from "@/hooks/use-auth";
+import { ProtectedRoute } from "@/components/protected-route";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={MahidolEventPlatform} />
-      <Route path="/calendar" component={Calendar} />
-      <Route path="/register" component={Register} />
+      <ProtectedRoute path="/" component={MahidolEventPlatform} />
+      <ProtectedRoute path="/calendar" component={Calendar} />
+      <ProtectedRoute path="/register" component={Register} />
       <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>
