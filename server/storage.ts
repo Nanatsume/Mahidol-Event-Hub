@@ -29,6 +29,30 @@ export class MemStorage implements IStorage {
   constructor() {
     this.users = new Map();
     this.events = [
+      {
+        id: 0,
+        title: "Winter Music Festival 2024",
+        date: "December 15",
+        category: "Music",
+        location: "Mahidol Hall",
+        image: "/attached_assets/winter.jpg",
+        description: "A magical evening of classical and contemporary music performances that warmed our winter night.",
+        attendees: 450,
+        organizer: "Music Department",
+        isPast: true
+      },
+      {
+        id: 6,
+        title: "Science Fair 2024",
+        date: "January 10",
+        category: "Academic",
+        location: "Science Complex",
+        image: "/attached_assets/sci.png",
+        description: "An amazing showcase of student research projects and scientific innovations across multiple disciplines.",
+        attendees: 320,
+        organizer: "Faculty of Science",
+        isPast: true
+      },
       { 
         id: 1,
         title: "Rock Night 2025",
