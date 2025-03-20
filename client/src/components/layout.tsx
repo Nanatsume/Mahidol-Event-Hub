@@ -1,13 +1,13 @@
 
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Home, Calendar, Users, Bell } from "lucide-react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   
   const handleNavigation = (path: string) => {
-    navigate(path);
+    setLocation(path);
   };
 
   return (
