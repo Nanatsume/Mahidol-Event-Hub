@@ -1,14 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Search, Bell, Star, Calendar, Music, Film, Gamepad2, 
-  Home, Info, Users, Book, Map, ChevronRight, Heart,
-  Share2, MessageSquare, User, LogOut
+import {
+  Search,
+  Bell,
+  Calendar,
+  Music,
+  Film,
+  Gamepad2,
+  Home,
+  Users,
+  Book,
+  Map,
+  ChevronRight,
+  Heart,
+  Share2,
+  MessageSquare,
+  User,
+  LogOut
 } from "lucide-react";
 
 interface MahidolEventPlatformProps {
@@ -32,97 +46,27 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
     { name: "Social", icon: <Users /> },
   ];
 
-  const events = [
-    { 
-      id: 1,
-      title: "Rock Night 2025", 
-      date: "March 20", 
-      category: "Music", 
-      location: "Mahidol Hall", 
-      image: "/images/rock.jpg", 
-      description: "Join us for an unforgettable rock concert featuring student bands and special guests! Doors open at 7 PM with refreshments available.",
-      attendees: 156,
-      organizer: "Music Club"
-    },
-    { 
-      id: 2,
-      title: "Mahidol Film Festival", 
-      date: "April 5", 
-      category: "Movies", 
-      location: "Cinema Room", 
-      image: "/images/film.jpg", 
-      description: "Experience amazing student films and documentaries from Mahidol's talented filmmakers. Awards ceremony follows the screenings.",
-      attendees: 89,
-      organizer: "Film Society" 
-    },
-    { 
-      id: 3,
-      title: "Gaming Tournament", 
-      date: "April 10", 
-      category: "Games", 
-      location: "Student Lounge", 
-      image: "/images/rov.jpg", 
-      description: "Show your skills at our exciting gaming tournament with prizes for the winners! Both casual and competitive players welcome.",
-      attendees: 42,
-      organizer: "Esports Club"
-    },
-    { 
-      id: 4,
-      title: "Research Symposium", 
-      date: "April 15", 
-      category: "Academic", 
-      location: "Learning Center", 
-      image: "/images/research.jpg", 
-      description: "Present your research projects and get feedback from faculty and peers. Great networking opportunity for aspiring researchers.",
-      attendees: 78,
-      organizer: "Research Department" 
-    },
-    { 
-      id: 5,
-      title: "International Food Fair", 
-      date: "April 23", 
-      category: "Social", 
-      location: "Central Plaza", 
-      image: "/images/food.jpg", 
-      description: "Taste dishes from around the world prepared by international students. Cultural performances throughout the day.",
-      attendees: 215,
-      organizer: "International Student Association" 
-    },
-  ];
+  // Fetch events from API
+  const { data: events = [] } = useQuery({
+    queryKey: ["/api/events"],
+  });
 
-  const pastEvents = [
-    { 
-      id: 6,
-      title: "Winter Concert", 
-      date: "February 10", 
-      category: "Music", 
-      location: "Mahidol Hall", 
-      image: "/images/winter.jpg", 
-      description: "Classical music performance featuring Mahidol's symphony orchestra.",
-      attendees: 178,
-      organizer: "Music Department" 
-    },
-    { 
-      id: 7,
-      title: "Science Fair", 
-      date: "January 25", 
-      category: "Academic", 
-      location: "Science Building", 
-      image: "/images/sci.png", 
-      description: "Annual science exhibition showcasing student projects and experiments.",
-      attendees: 142,
-      organizer: "Science Faculty" 
-    },
-  ];
+  const filteredEvents = events.filter((event: any) => {
+    // Filter by search term
+    const matchesSearch = search === "" ||
+      event.title.toLowerCase().includes(search.toLowerCase()) ||
+      event.category.toLowerCase().includes(search.toLowerCase()) ||
+      event.location.toLowerCase().includes(search.toLowerCase()) ||
+      event.organizer.toLowerCase().includes(search.toLowerCase());
 
-  useEffect(() => {
-    if (selectedEventId) {
-      const event = [...events, ...pastEvents].find(e => e.id === selectedEventId);
-      if (event) {
-        setSelectedEvent(event);
-      }
-    }
-  }, [selectedEventId]);
+    // Filter by category
+    const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
+
+    // Filter by past/upcoming
+    const matchesTab = activeTab === "upcoming" ? !event.isPast : event.isPast;
+
+    return matchesSearch && matchesCategory && matchesTab;
+  });
 
   const toggleSaveEvent = (eventId: number) => {
     setSavedEvents(prev => {
@@ -133,20 +77,6 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
       }
     });
   };
-
-  const filteredEvents = (activeTab === "upcoming" ? events : pastEvents).filter(event => {
-    // Filter by search term
-    const matchesSearch = search === "" || 
-      event.title.toLowerCase().includes(search.toLowerCase()) ||
-      event.category.toLowerCase().includes(search.toLowerCase()) ||
-      event.location.toLowerCase().includes(search.toLowerCase()) ||
-      event.organizer.toLowerCase().includes(search.toLowerCase());
-    
-    // Filter by category
-    const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
 
   return (
     <div className="p-4 max-w-6xl mx-auto flex flex-col gap-4 bg-gray-50 min-h-screen">
@@ -198,7 +128,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
             Back to Events
           </Button>
           <img src={selectedEvent.image} alt={selectedEvent.title} className="w-full h-64 object-cover rounded-lg mb-4" />
-          
+
           <div className="flex flex-wrap justify-between items-start mb-4">
             <div className="flex-1 min-w-0 pr-4">
               <h2 className="text-2xl text-black font-bold mb-1">{selectedEvent.title}</h2>
@@ -210,8 +140,8 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
               </div>
             </div>
             <div className="flex gap-2 mt-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className={`flex gap-1 ${savedEvents.includes(selectedEvent.id) ? 'bg-red-50 text-red-500 border-red-200' : ''}`}
                 onClick={() => toggleSaveEvent(selectedEvent.id)}
               >
@@ -223,12 +153,12 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
               </Button>
             </div>
           </div>
-          
+
           <div className="mb-6">
             <h3 className="text-lg text-black font-semibold mb-2">About This Event</h3>
             <p className="text-gray-700">{selectedEvent.description}</p>
           </div>
-          
+
           <div className="mb-6">
             <h3 className="text-lg text-black font-semibold mb-2">Location</h3>
             <div className="bg-gray-100 p-3 rounded-lg flex items-center">
@@ -236,7 +166,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
               <span>{selectedEvent.location}, Mahidol University</span>
             </div>
           </div>
-          
+
           <div className="flex gap-3">
             <Button className="bg-green-600 text-white flex-1">Register Now</Button>
             <Button className="bg-blue-600 text-white flex-1 flex items-center justify-center">
@@ -261,7 +191,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
           {/* Categories */}
           <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
             {categories.map((cat) => (
-              <Button 
+              <Button
                 key={cat.name}
                 variant={selectedCategory === cat.name ? "default" : "outline"}
                 className={`flex gap-1 ${selectedCategory === cat.name ? 'bg-blue-600 text-white' : 'border-blue-600 text-blue-600'}`}
@@ -289,15 +219,15 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
             </div>
           ) : (
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-              {filteredEvents.map((event) => (
-                <Card 
-                  key={event.id} 
+              {filteredEvents.map((event: any) => (
+                <Card
+                  key={event.id}
                   className="shadow-md border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow duration-300"
                 >
                   <div className="relative">
                     <img src={event.image} alt={event.title} className="w-full h-40 object-cover" />
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       className={`absolute top-2 right-2 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-70 ${savedEvents.includes(event.id) ? 'text-red-500' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -319,7 +249,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
                       <div className="text-xs text-gray-500">
                         <span>{event.attendees} attending</span>
                       </div>
-                      <Button 
+                      <Button
                         className="bg-blue-600 text-white text-sm px-3 py-1 h-auto flex items-center"
                         onClick={() => setSelectedEvent(event)}
                       >
