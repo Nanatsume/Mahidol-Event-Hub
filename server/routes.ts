@@ -30,6 +30,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendStatus(200);
   });
 
+  // Register for an event
+  app.post("/api/registrations", async (req, res) => {
+    try {
+      const registration = await storage.registerForEvent(req.body);
+      res.json(registration);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Get user's registrations
+  app.get("/api/registrations/user/:userId", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const registrations = await storage.getRegistrationsByUser(userId);
+    res.json(registrations);
+  });
+
+  // Check if user is registered for an event
+  app.get("/api/registrations/check/:userId/:eventId", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const eventId = parseInt(req.params.eventId);
+    const isRegistered = await storage.isUserRegistered(userId, eventId);
+    res.json({ isRegistered });
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

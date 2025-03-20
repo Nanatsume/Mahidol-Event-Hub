@@ -1,16 +1,23 @@
-import { events, type Event, type InsertEvent, type SavedEvent, type InsertSavedEvent } from "@shared/schema";
+import { events, type Event, type InsertEvent, type SavedEvent, type InsertSavedEvent, type Registration, type InsertRegistration } from "@shared/schema";
 
 export interface IStorage {
   getEvents(): Promise<Event[]>;
   getSavedEvents(userId: number): Promise<SavedEvent[]>;
   saveEvent(savedEvent: InsertSavedEvent): Promise<SavedEvent>;
   unsaveEvent(userId: number, eventId: number): Promise<void>;
+  // New registration methods
+  registerForEvent(registration: InsertRegistration): Promise<Registration>;
+  getRegistrationsByUser(userId: number): Promise<Registration[]>;
+  getRegistrationsByEvent(eventId: number): Promise<Registration[]>;
+  isUserRegistered(userId: number, eventId: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
   private events: Event[];
   private savedEvents: SavedEvent[];
+  private registrations: Registration[];
   private savedEventId: number;
+  private registrationId: number;
 
   constructor() {
     // Initialize with mock data
@@ -77,7 +84,9 @@ export class MemStorage implements IStorage {
       }
     ];
     this.savedEvents = [];
+    this.registrations = [];
     this.savedEventId = 1;
+    this.registrationId = 1;
   }
 
   async getEvents(): Promise<Event[]> {
@@ -100,6 +109,44 @@ export class MemStorage implements IStorage {
   async unsaveEvent(userId: number, eventId: number): Promise<void> {
     this.savedEvents = this.savedEvents.filter(
       saved => !(saved.userId === userId && saved.eventId === eventId)
+    );
+  }
+
+  // New registration methods implementation
+  async registerForEvent(registration: InsertRegistration): Promise<Registration> {
+    const existingRegistration = await this.isUserRegistered(registration.userId, registration.eventId);
+    if (existingRegistration) {
+      throw new Error("User is already registered for this event");
+    }
+
+    const newRegistration: Registration = {
+      ...registration,
+      id: this.registrationId++,
+      registeredAt: new Date(),
+    };
+
+    this.registrations.push(newRegistration);
+
+    // Update attendee count
+    const event = this.events.find(e => e.id === registration.eventId);
+    if (event) {
+      event.attendees += 1;
+    }
+
+    return newRegistration;
+  }
+
+  async getRegistrationsByUser(userId: number): Promise<Registration[]> {
+    return this.registrations.filter(reg => reg.userId === userId);
+  }
+
+  async getRegistrationsByEvent(eventId: number): Promise<Registration[]> {
+    return this.registrations.filter(reg => reg.eventId === eventId);
+  }
+
+  async isUserRegistered(userId: number, eventId: number): Promise<boolean> {
+    return this.registrations.some(
+      reg => reg.userId === userId && reg.eventId === eventId && reg.status === "registered"
     );
   }
 }

@@ -24,6 +24,8 @@ import {
   User,
   LogOut
 } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface MahidolEventPlatformProps {
   selectedEventId?: number;
@@ -36,6 +38,8 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("upcoming");
   const [savedEvents, setSavedEvents] = useState<number[]>([]);
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const { toast } = useToast();
 
   const categories = [
     { name: "All", icon: <Calendar /> },
@@ -50,6 +54,15 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   const { data: events = [] } = useQuery({
     queryKey: ["/api/events"],
   });
+
+  useQuery({
+    queryKey: ["/api/registrations/check", 1, selectedEvent?.id],
+    enabled: !!selectedEvent,
+    onSuccess: (data) => {
+      setIsUserRegistered(data.isRegistered);
+    },
+  });
+
 
   const filteredEvents = events.filter((event: any) => {
     // Filter by search term
@@ -168,7 +181,36 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
           </div>
 
           <div className="flex gap-3">
-            <Button className="bg-green-600 text-white flex-1">Register Now</Button>
+            {isUserRegistered ? (
+              <Button disabled className="bg-gray-600 text-white flex-1">
+                Already Registered
+              </Button>
+            ) : (
+              <Button
+                className="bg-green-600 text-white flex-1"
+                onClick={async () => {
+                  try {
+                    await apiRequest("/api/registrations", {
+                      method: "POST",
+                      body: { userId: 1, eventId: selectedEvent.id }
+                    });
+                    setIsUserRegistered(true);
+                    toast({
+                      title: "Success!",
+                      description: "You have successfully registered for this event.",
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Error",
+                      description: "Failed to register for the event. Please try again.",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+              >
+                Register Now
+              </Button>
+            )}
             <Button className="bg-blue-600 text-white flex-1 flex items-center justify-center">
               <MessageSquare size={18} className="mr-2" /> Contact Organizer
             </Button>
