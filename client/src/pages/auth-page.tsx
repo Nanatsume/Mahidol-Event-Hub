@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
+import { toast } from "@/components/ui/toast"; // Added import for toast
 
 type LoginData = {
   username: string;
@@ -59,13 +60,40 @@ export default function AuthPage() {
     }
   };
 
-  const onRegister = async (data: InsertUser) => {
+  const onSubmit = async (data: InsertUser) => {
     try {
-      await registerMutation.mutateAsync(data);
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Registration failed");
+      }
+
+      const user = await response.json();
+      toast({
+        title: "Registration Successful",
+        description: "Your account has been created successfully.",
+      });
+
+      // Redirect to home page after successful registration
       setLocation("/");
     } catch (error) {
-      console.error("Registration failed:", error);
+      toast({
+        title: "Registration Failed",
+        description: error.message || "There was an error creating your account.",
+        variant: "destructive",
+      });
     }
+  };
+
+  const onRegister = async (data: InsertUser) => {
+    onSubmit(data); // Use the new onSubmit function
   };
 
   return (
