@@ -72,12 +72,14 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
 
 
   const filteredEvents = events.filter((event: any) => {
-    // Filter by search term
-    const matchesSearch = search === "" ||
-      event.title.toLowerCase().includes(search.toLowerCase()) ||
-      event.category.toLowerCase().includes(search.toLowerCase()) ||
-      event.location.toLowerCase().includes(search.toLowerCase()) ||
-      event.organizer.toLowerCase().includes(search.toLowerCase());
+    // Filter by search term (case-insensitive)
+    const searchLower = search.toLowerCase();
+    const matchesSearch = search === "" || 
+      event.title.toLowerCase().includes(searchLower) ||
+      event.category.toLowerCase().includes(searchLower) ||
+      event.location.toLowerCase().includes(searchLower) ||
+      event.description.toLowerCase().includes(searchLower) ||
+      event.organizer.toLowerCase().includes(searchLower);
 
     // Filter by category
     const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
