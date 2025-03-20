@@ -99,75 +99,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-gray-50 min-h-screen">
-      {/* Navigation Bar */}
-      <div className="flex justify-between items-center bg-blue-600 p-3 text-white sticky top-0 z-10 shadow-md">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-xl font-bold">Mahidol Event Hub</h1>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <Button 
-            variant="ghost" 
-            className="text-white hidden md:flex"
-            onClick={() => handleNavigation("/")}
-          >
-            <Home className="mr-1" size={18} /> Home
-          </Button>
-          <Button 
-            variant="ghost" 
-            className="text-white hidden md:flex"
-            onClick={() => handleNavigation("/calendar")}
-          >
-            <Calendar className="mr-1" size={18} /> Calendar
-          </Button>
-          <Button 
-            variant="ghost" 
-            className="text-white hidden md:flex"
-            onClick={() => handleNavigation("/register")}
-          >
-            <Users className="mr-1" size={18} /> My Registrations
-          </Button>
-          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/")}><Home size={18} /></Button>
-          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/calendar")}><Calendar size={18} /></Button>
-          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/register")}><Users size={18} /></Button>
-          <Button variant="ghost" className="text-white">
-            <Bell size={18} />
-          </Button>
-          <div className="relative">
-            <Avatar className="cursor-pointer" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
-              <AvatarImage src="/api/placeholder/40/40" />
-              <AvatarFallback>MU</AvatarFallback>
-            </Avatar>
-            {isUserMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                <div className="px-4 py-2 text-gray-800 border-b">
-                  <p className="font-semibold">Student Name</p>
-                  <p className="text-xs text-gray-500">student@mahidol.ac.th</p>
-                </div>
-                <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
-                  <User size={16} className="mr-2" /> Profile
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  onClick={() => handleNavigation("/register")}
-                >
-                  <Calendar size={16} className="mr-2" /> My Registrations
-                </Button>
-                <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
-                  <Heart size={16} className="mr-2" /> Saved Events
-                </Button>
-                <Button variant="ghost" className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100">
-                  <LogOut size={16} className="mr-2" /> Sign Out
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="p-4 max-w-6xl mx-auto w-full">
+    <div className="p-4 max-w-6xl mx-auto flex flex-col gap-4 bg-gray-50 min-h-screen">
       {/* Navigation Bar */}
       <div className="flex justify-between items-center bg-blue-600 p-3 rounded-lg text-white sticky top-0 z-10 shadow-md">
         <h1 className="text-xl font-bold">Mahidol Event Hub</h1>
@@ -373,7 +305,6 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
           )}
         </>
       )}
-      </div>
     </div>
   );
 }
