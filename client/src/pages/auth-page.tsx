@@ -51,10 +51,12 @@ export default function AuthPage() {
 
   const onLogin = async (data: LoginData) => {
     await loginMutation.mutateAsync(data);
+    setLocation("/");
   };
 
   const onRegister = async (data: InsertUser) => {
     await registerMutation.mutateAsync(data);
+    setLocation("/");
   };
 
   return (
