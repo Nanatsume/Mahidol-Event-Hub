@@ -20,6 +20,7 @@ function Router() {
           <ProtectedRoute path="/" component={MahidolEventPlatform} />
           <ProtectedRoute path="/calendar" component={Calendar} />
           <ProtectedRoute path="/register" component={Register} />
+          <ProtectedRoute path="/saved" component={SavedEvents} />
           <Route component={NotFound} />
         </Switch>
       </Layout>
