@@ -16,7 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
-import { toast } from "@/components/ui/toast"; // Added import for toast
+import { useToast } from "@/components/ui/use-toast"; // Updated import
+
 
 type LoginData = {
   username: string;
@@ -28,6 +29,7 @@ export default function AuthPage() {
   const [_, setLocation] = useLocation();
   const { loginMutation, registerMutation, user } = useAuth();
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
+  const { toast } = useToast(); // Added useToast hook
 
   const loginForm = useForm<LoginData>({
     defaultValues: {
