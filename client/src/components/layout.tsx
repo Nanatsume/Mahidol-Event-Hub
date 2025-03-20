@@ -1,11 +1,10 @@
-
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Home, Calendar, Users, Bell } from "lucide-react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [, setLocation] = useLocation();
-  
+
   const handleNavigation = (path: string) => {
     setLocation(path);
   };
@@ -16,7 +15,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex items-center space-x-4">
           <h1 className="text-xl font-bold">Mahidol Event Hub</h1>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <Button 
             variant="ghost" 
