@@ -86,13 +86,7 @@ export default function Header() {
             >
               <Heart size={18} className="mr-2" /> Saved
             </Button>
-            <Button 
-              variant="ghost" 
-              className={`text-white hover:bg-blue-800 ${location === '/register' ? 'bg-blue-800' : ''}`}
-              onClick={() => handleNavigation("/register")}
-            >
-              <BookOpenCheck size={18} className="mr-2" /> Register
-            </Button>
+
             <Button 
               variant="ghost" 
               className={`text-white hover:bg-blue-800 ${location === '/usability-testing' ? 'bg-blue-800' : ''}`}
@@ -158,16 +152,7 @@ export default function Header() {
                     >
                       <User size={18} className="mr-3 text-blue-500" /> My Profile
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-start px-4 py-2.5 text-gray-700 hover:bg-blue-50"
-                      onClick={() => {
-                        handleNavigation("/register");
-                        setIsUserMenuOpen(false);
-                      }}
-                    >
-                      <BookOpenCheck size={18} className="mr-3 text-blue-500" /> My Registrations
-                    </Button>
+
                     <Button 
                       variant="ghost" 
                       className="w-full justify-start px-4 py-2.5 text-gray-700 hover:bg-blue-50"
@@ -230,13 +215,7 @@ export default function Header() {
             >
               <Heart size={18} className="mr-2" /> Saved Events
             </Button>
-            <Button 
-              variant="ghost" 
-              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/register' ? 'bg-blue-700' : ''} mb-1`}
-              onClick={() => handleNavigation("/register")}
-            >
-              <BookOpenCheck size={18} className="mr-2" /> Event Registration
-            </Button>
+
             <Button 
               variant="ghost" 
               className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/usability-testing' ? 'bg-blue-700' : ''} mb-1`}
