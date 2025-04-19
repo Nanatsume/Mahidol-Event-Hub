@@ -89,11 +89,6 @@ export default function Profile() {
     });
   };
 
-  const registeredEvents = [
-    { id: 1, title: "Research Symposium", date: "April 15, 2025", status: "Registered" },
-    { id: 2, title: "Rock Night 2025", date: "March 10, 2025", status: "Attended" }
-  ];
-
   const interests = ["Web Development", "Artificial Intelligence", "Data Science", "Blockchain", "Mobile Apps"];
 
   return (
@@ -117,9 +112,8 @@ export default function Profile() {
       </div>
 
       <Tabs defaultValue="personal" className="w-full" onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 mb-8">
+        <TabsList className="grid w-full grid-cols-2 mb-8">
           <TabsTrigger value="personal">Personal Info</TabsTrigger>
-          <TabsTrigger value="events">My Events</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
@@ -240,44 +234,7 @@ export default function Profile() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="events">
-          <Card className="shadow-md border-blue-100">
-            <CardHeader>
-              <CardTitle>Registered Events</CardTitle>
-              <CardDescription>Events you have registered for or attended</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="divide-y">
-                {registeredEvents.map((event) => (
-                  <div key={event.id} className="py-4 flex justify-between items-center">
-                    <div>
-                      <h3 className="font-medium text-lg text-blue-800">{event.title}</h3>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar size={14} className="mr-1" />
-                        <span>{event.date}</span>
-                      </div>
-                    </div>
-                    <Badge 
-                      className={event.status === "Registered" 
-                        ? "bg-green-100 text-green-800 hover:bg-green-200"
-                        : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                      }
-                    >
-                      {event.status}
-                    </Badge>
-                  </div>
-                ))}
 
-                {registeredEvents.length === 0 && (
-                  <div className="py-8 text-center">
-                    <p className="text-gray-500">You haven't registered for any events yet.</p>
-                    <Button className="mt-4 bg-blue-600 hover:bg-blue-700">Browse Events</Button>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         <TabsContent value="settings">
           <Card className="shadow-md border-blue-100">
