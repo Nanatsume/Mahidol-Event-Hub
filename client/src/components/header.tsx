@@ -92,6 +92,13 @@ export default function Header() {
             >
               <BookOpenCheck size={18} className="mr-2" /> Register
             </Button>
+            <Button 
+              variant="ghost" 
+              className={`text-white hover:bg-blue-800 ${location === '/usability-testing' ? 'bg-blue-800' : ''}`}
+              onClick={() => handleNavigation("/usability-testing")}
+            >
+              <Clipboard size={18} className="mr-2" /> Testing
+            </Button>
           </div>
 
           {/* User Area */}
@@ -200,10 +207,17 @@ export default function Header() {
             </Button>
             <Button 
               variant="ghost" 
-              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/register' ? 'bg-blue-700' : ''}`}
+              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/register' ? 'bg-blue-700' : ''} mb-1`}
               onClick={() => handleNavigation("/register")}
             >
               <BookOpenCheck size={18} className="mr-2" /> Event Registration
+            </Button>
+            <Button 
+              variant="ghost" 
+              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/usability-testing' ? 'bg-blue-700' : ''}`}
+              onClick={() => handleNavigation("/usability-testing")}
+            >
+              <Clipboard size={18} className="mr-2" /> Usability Testing
             </Button>
           </div>
         )}
