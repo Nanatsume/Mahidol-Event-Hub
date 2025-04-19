@@ -97,11 +97,15 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   // Check if user is registered for the selected event
   const { data: registrationData } = useQuery<RegistrationCheckResponse>({
     queryKey: ["/api/registrations/check", 1, selectedEvent?.id],
-    enabled: !!selectedEvent,
-    onSuccess: (data) => {
-      setIsUserRegistered(data.isRegistered);
-    }
+    enabled: !!selectedEvent
   });
+
+  // Update registration status when data changes
+  useEffect(() => {
+    if (registrationData) {
+      setIsUserRegistered(registrationData.isRegistered);
+    }
+  }, [registrationData]);
 
   const filteredEvents = Array.isArray(events) ? events.filter((event) => {
     // Filter by search term (case-insensitive)

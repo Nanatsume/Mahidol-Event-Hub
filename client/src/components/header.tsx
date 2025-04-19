@@ -148,7 +148,14 @@ export default function Header() {
                     <p className="text-sm text-blue-600">{user.email}</p>
                   </div>
                   <div className="py-1">
-                    <Button variant="ghost" className="w-full justify-start px-4 py-2.5 text-gray-700 hover:bg-blue-50">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start px-4 py-2.5 text-gray-700 hover:bg-blue-50"
+                      onClick={() => {
+                        handleNavigation("/profile");
+                        setIsUserMenuOpen(false);
+                      }}
+                    >
                       <User size={18} className="mr-3 text-blue-500" /> My Profile
                     </Button>
                     <Button 
@@ -239,10 +246,17 @@ export default function Header() {
             </Button>
             <Button 
               variant="ghost" 
-              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/organizer-dashboard' ? 'bg-blue-700' : ''}`}
+              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/organizer-dashboard' ? 'bg-blue-700' : ''} mb-1`}
               onClick={() => handleNavigation("/organizer-dashboard")}
             >
               <Settings size={18} className="mr-2" /> Organizer Dashboard
+            </Button>
+            <Button 
+              variant="ghost" 
+              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/profile' ? 'bg-blue-700' : ''}`}
+              onClick={() => handleNavigation("/profile")}
+            >
+              <User size={18} className="mr-2" /> My Profile
             </Button>
           </div>
         )}

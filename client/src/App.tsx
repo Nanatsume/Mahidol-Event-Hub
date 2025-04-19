@@ -11,6 +11,7 @@ import AuthPage from "@/pages/auth-page";
 import SavedEvents from "@/pages/saved-events";
 import UsabilityTesting from "@/pages/usability-testing";
 import OrganizerDashboard from "@/pages/organizer-dashboard";
+import Profile from "@/pages/profile";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
 
@@ -26,6 +27,7 @@ function Router() {
           <ProtectedRoute path="/saved" component={SavedEvents} />
           <ProtectedRoute path="/usability-testing" component={UsabilityTesting} />
           <ProtectedRoute path="/organizer-dashboard" component={OrganizerDashboard} />
+          <ProtectedRoute path="/profile" component={Profile} />
           <Route component={NotFound} />
         </Switch>
       </Layout>
