@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertUserSchema, type InsertUser } from "@shared/schema";
@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
-import { useToast } from "@/hooks/use-toast"; // Fix import path
+import { useToast } from "@/hooks/use-toast";
 
 
 type LoginData = {
@@ -47,11 +47,12 @@ export default function AuthPage() {
     },
   });
 
-  // Redirect after all hooks are called
-  if (user) {
-    setLocation("/");
-    return null;
-  }
+  // Use useEffect for redirection instead of doing it during render
+  useEffect(() => {
+    if (user) {
+      setLocation("/");
+    }
+  }, [user, setLocation]);
 
   const onLogin = async (data: LoginData) => {
     try {

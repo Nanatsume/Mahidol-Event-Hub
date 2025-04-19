@@ -8,7 +8,8 @@ import MahidolEventPlatform from "@/pages/mahidol-event-platform";
 import Calendar from "@/pages/calendar";
 import Register from "@/pages/register";
 import AuthPage from "@/pages/auth-page";
-import SavedEvents from "@/pages/saved-events"; // Import the SavedEvents component
+import SavedEvents from "@/pages/saved-events";
+import UsabilityTesting from "@/pages/usability-testing";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
 
@@ -21,8 +22,8 @@ function Router() {
           <ProtectedRoute path="/" component={MahidolEventPlatform} />
           <ProtectedRoute path="/calendar" component={Calendar} />
           <ProtectedRoute path="/register" component={Register} />
-          <ProtectedRoute path="/saved" component={SavedEvents} />{" "}
-          {/* Add SavedEvents Route */}
+          <ProtectedRoute path="/saved" component={SavedEvents} />
+          <ProtectedRoute path="/usability-testing" component={UsabilityTesting} />
           <Route component={NotFound} />
         </Switch>
       </Layout>
