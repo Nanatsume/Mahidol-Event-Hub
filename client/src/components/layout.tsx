@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Home, Calendar, Users, Bell, User, Heart, LogOut } from "lucide-react";
+import { Home, Calendar, Bell, User, Heart, LogOut } from "lucide-react";
+import { User as UserType } from "@shared/schema";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [, setLocation] = useLocation();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { data: user } = useQuery({ queryKey: ["/api/user"] });
+  const { data: user } = useQuery<UserType>({ 
+    queryKey: ["/api/user"],
+    queryFn: getQueryFn({ on401: "returnNull" })
+  });
 
   const handleNavigation = (path: string) => {
     setLocation(path);
@@ -41,16 +46,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <Calendar className="mr-1" size={18} /> Calendar
           </Button>
-          <Button 
-            variant="ghost" 
-            className="text-white hidden md:flex"
-            onClick={() => handleNavigation("/register")}
-          >
-            <Users className="mr-1" size={18} /> My Registrations
-          </Button>
           <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/")}><Home size={18} /></Button>
           <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/calendar")}><Calendar size={18} /></Button>
-          <Button variant="ghost" className="text-white md:hidden" onClick={() => handleNavigation("/register")}><Users size={18} /></Button>
           <Button variant="ghost" className="text-white"><Bell size={18} /></Button>
           
           <div className="relative">
@@ -75,13 +72,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 >
                   <User size={16} className="mr-2" /> Profile
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  onClick={() => handleNavigation("/register")}
-                >
-                  <Calendar size={16} className="mr-2" /> My Registrations
-                </Button>
+
                 <Button 
                   variant="ghost" 
                   className="w-full justify-start px-4 py-2 text-gray-700 hover:bg-gray-100"
