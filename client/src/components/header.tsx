@@ -171,6 +171,16 @@ export default function Header() {
                     >
                       <Heart size={18} className="mr-3 text-blue-500" /> Saved Events
                     </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start px-4 py-2.5 text-gray-700 hover:bg-blue-50"
+                      onClick={() => {
+                        handleNavigation("/organizer-dashboard");
+                        setIsUserMenuOpen(false);
+                      }}
+                    >
+                      <Settings size={18} className="mr-3 text-blue-500" /> Organizer Dashboard
+                    </Button>
                   </div>
                   <div className="pt-1 pb-2 px-4 border-t">
                     <Button 
