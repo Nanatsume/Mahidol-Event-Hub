@@ -10,6 +10,7 @@ import Register from "@/pages/register";
 import AuthPage from "@/pages/auth-page";
 import SavedEvents from "@/pages/saved-events";
 import UsabilityTesting from "@/pages/usability-testing";
+import OrganizerDashboard from "@/pages/organizer-dashboard";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
 
@@ -24,6 +25,7 @@ function Router() {
           <ProtectedRoute path="/register" component={Register} />
           <ProtectedRoute path="/saved" component={SavedEvents} />
           <ProtectedRoute path="/usability-testing" component={UsabilityTesting} />
+          <ProtectedRoute path="/organizer-dashboard" component={OrganizerDashboard} />
           <Route component={NotFound} />
         </Switch>
       </Layout>

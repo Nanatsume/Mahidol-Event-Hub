@@ -13,7 +13,8 @@ import {
   Menu, 
   X,
   BookOpenCheck,
-  Clipboard
+  Clipboard,
+  Settings
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -98,6 +99,13 @@ export default function Header() {
               onClick={() => handleNavigation("/usability-testing")}
             >
               <Clipboard size={18} className="mr-2" /> Testing
+            </Button>
+            <Button 
+              variant="ghost" 
+              className={`text-white hover:bg-blue-800 ${location === '/organizer-dashboard' ? 'bg-blue-800' : ''}`}
+              onClick={() => handleNavigation("/organizer-dashboard")}
+            >
+              <Settings size={18} className="mr-2" /> Organizer
             </Button>
           </div>
 
@@ -214,10 +222,17 @@ export default function Header() {
             </Button>
             <Button 
               variant="ghost" 
-              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/usability-testing' ? 'bg-blue-700' : ''}`}
+              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/usability-testing' ? 'bg-blue-700' : ''} mb-1`}
               onClick={() => handleNavigation("/usability-testing")}
             >
               <Clipboard size={18} className="mr-2" /> Usability Testing
+            </Button>
+            <Button 
+              variant="ghost" 
+              className={`w-full justify-start text-white hover:bg-blue-700 ${location === '/organizer-dashboard' ? 'bg-blue-700' : ''}`}
+              onClick={() => handleNavigation("/organizer-dashboard")}
+            >
+              <Settings size={18} className="mr-2" /> Organizer Dashboard
             </Button>
           </div>
         )}
