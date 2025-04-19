@@ -62,40 +62,18 @@ export default function AuthPage() {
     }
   };
 
-  const onSubmit = async (data: InsertUser) => {
+  const onRegister = async (data: InsertUser) => {
     try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Registration failed");
-      }
-
-      const user = await response.json();
+      await registerMutation.mutateAsync(data);
       toast({
         title: "Registration Successful",
         description: "Your account has been created successfully.",
       });
-
-      // Redirect to home page after successful registration
       setLocation("/");
-    } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: error.message || "There was an error creating your account.",
-        variant: "destructive",
-      });
+    } catch (error: any) {
+      // Error handling already done in the mutation's onError
+      console.error("Registration error:", error);
     }
-  };
-
-  const onRegister = async (data: InsertUser) => {
-    onSubmit(data); // Use the new onSubmit function
   };
 
   return (

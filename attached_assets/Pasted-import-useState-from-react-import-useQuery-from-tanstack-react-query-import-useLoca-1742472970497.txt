@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ import {
   User,
   LogOut
 } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
 interface MahidolEventPlatformProps {
@@ -37,11 +38,10 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("upcoming");
-  const [isUserRegistered, setIsUserRegistered] = useState(false);
   const [savedEvents, setSavedEvents] = useState<number[]>([]);
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
   const [_, setLocation] = useLocation();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
   const categories = [
     { name: "All", icon: <Calendar /> },
@@ -57,33 +57,6 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
     queryKey: ["/api/events"],
   });
 
-  // Load saved events from localStorage on component mount
-  useEffect(() => {
-    const savedEventsFromStorage = localStorage.getItem('savedEvents');
-    if (savedEventsFromStorage) {
-      setSavedEvents(JSON.parse(savedEventsFromStorage));
-    }
-  }, []);
-
-  // Check for selectedEventId in localStorage when component mounts
-  useEffect(() => {
-    const storedEventId = localStorage.getItem('selectedEventId');
-    if (storedEventId) {
-      // Find the event in the events list
-      const event = events.find((e: any) => e.id === parseInt(storedEventId));
-      if (event) {
-        setSelectedEvent(event);
-      }
-      // Clear the stored ID to prevent it from being loaded again
-      localStorage.removeItem('selectedEventId');
-    }
-  }, [events]);
-
-  // Save to localStorage whenever savedEvents changes
-  useEffect(() => {
-    localStorage.setItem('savedEvents', JSON.stringify(savedEvents));
-  }, [savedEvents]);
-
   const handleNavigation = (path: string) => {
     setSelectedEvent(null); // Clear selected event when navigating
     setLocation(path);
@@ -96,6 +69,7 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
       setIsUserRegistered(data.isRegistered);
     },
   });
+
 
   const filteredEvents = events.filter((event: any) => {
     // Filter by search term (case-insensitive)
@@ -116,47 +90,25 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
     return matchesSearch && matchesCategory && matchesTab;
   });
 
-  const toggleSaveEvent = (eventId: number, e?: React.MouseEvent) => {
-    if (e) {
-      e.stopPropagation();
-    }
-
+  const toggleSaveEvent = (eventId: number) => {
     setSavedEvents(prev => {
       if (prev.includes(eventId)) {
-        // Remove the event
-        toast({
-          title: "Event removed",
-          description: "Event removed from your saved list",
-        });
         return prev.filter(id => id !== eventId);
       } else {
-        // Add the event
-        toast({
-          title: "Event saved",
-          description: "Event added to your saved list",
-        });
         return [...prev, eventId];
       }
     });
   };
 
-  const goToSavedEvents = () => {
-    setLocation("/saved-events");
-  };
-
   return (
     <div className="p-4 max-w-6xl mx-auto flex flex-col gap-4 bg-gray-50 min-h-screen">
+
       {selectedEvent ? (
         /* Event Details Page */
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <div className="flex justify-between mb-4">
-            <Button onClick={() => setSelectedEvent(null)} className="bg-blue-600 text-white">
-              Back to Events
-            </Button>
-            <Button onClick={goToSavedEvents} className="bg-blue-100 text-blue-800">
-              View Saved Events
-            </Button>
-          </div>
+          <Button onClick={() => setSelectedEvent(null)} className="mb-4 bg-blue-600 text-white">
+            Back to Events
+          </Button>
           <img src={selectedEvent.image} alt={selectedEvent.title} className="w-full h-64 object-cover rounded-lg mb-4" />
 
           <div className="flex flex-wrap justify-between items-start mb-4">
@@ -231,15 +183,13 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
             ))}
           </div>
 
-          {/* Navigation Bar with Saved Events Button */}
-          <div className="flex justify-between items-center mb-4">
-            <Tabs defaultValue="upcoming" className="flex-1" onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
-                <TabsTrigger value="past">Past Events</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+          {/* Event Tabs */}
+          <Tabs defaultValue="upcoming" className="mb-4" onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
+              <TabsTrigger value="past">Past Events</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           {/* Events List */}
           {filteredEvents.length === 0 ? (
@@ -261,7 +211,8 @@ export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPl
                       variant="ghost"
                       className={`absolute top-2 right-2 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-70 ${savedEvents.includes(event.id) ? 'text-red-500' : ''}`}
                       onClick={(e) => {
-                        toggleSaveEvent(event.id, e);
+                        e.stopPropagation();
+                        toggleSaveEvent(event.id);
                       }}
                     >
                       {savedEvents.includes(event.id) ? <Heart fill="red" size={18} /> : <Heart size={18} />}
