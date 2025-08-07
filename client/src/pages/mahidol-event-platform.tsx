@@ -32,9 +32,7 @@ interface MahidolEventPlatformProps {
   selectedEventId?: number;
 }
 
-interface RegistrationCheckResponse {
-  isRegistered: boolean;
-}
+
 
 export default function MahidolEventPlatform({ selectedEventId }: MahidolEventPlatformProps) {
   const [search, setSearch] = useState("");
