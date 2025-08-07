@@ -36,8 +36,8 @@
 
 1. **Clone repository**
    ```bash
-   git clone https://github.com/yourusername/mahidol-event-hub.git
-   cd mahidol-event-hub
+   git clone https://github.com/Nanatsume/Mahidol-Event-Hub.git
+   cd Mahidol-Event-Hub
    ```
 
 2. **ติดตั้ง dependencies**
@@ -141,9 +141,9 @@ MIT License - ดูไฟล์ [LICENSE](LICENSE) สำหรับราย�
 - **LinkedIn:** [Nhatthapong](https://www.linkedin.com/in/nhatthapong-pukdeeboon-205203369/)
 
 ### **การสนับสนุน**
-- **Bug Reports:** [Issues](https://github.com/Nanatsume/hr-optimization-system/issues)
-- **Feature Requests:** [Discussions](https://github.com/Nanatsume/hr-optimization-system/discussions)
-- **Documentation:** [Wiki](https://github.com/Nanatsume/hr-optimization-system/wiki)
+- **Bug Reports:** [Issues](https://github.com/Nanatsume/Mahidol-Event-Hub/issues)
+- **Feature Requests:** [Discussions](https://github.com/Nanatsume/Mahidol-Event-Hub/discussions)
+- **Documentation:** [Wiki](https://github.com/Nanatsume/Mahidol-Event-Hub/wiki)
 ---
 
 **Mahidol University Event Hub - เชื่อมต่อชุมชนมหิดลผ่านกิจกรรมและอีเวนต์**
